@@ -1136,6 +1136,7 @@ const firebaseConfig = {
 let db = null;
 let syncEnabled = false;
 let saveTimeout = null;
+let ignoreNextSync = false; // prevent re-render on own writes
 
 function initFirebase() {
   try {
@@ -1144,19 +1145,32 @@ function initFirebase() {
     syncEnabled = true;
     setStatus('connecting');
 
-    // Listen for real-time changes from Firebase
-    db.ref('geely_content_2026').on('value', snapshot => {
+    // Listen ONCE on load to pull current data, then watch for remote changes
+    db.ref('geely_content_2026').once('value', snapshot => {
       const val = snapshot.val();
       if (val) {
-        // Merge incoming data without overwriting default structure
         Object.keys(val).forEach(k => { data[k] = val[k]; });
         renderAll();
-        // Re-apply active phase tab
         document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
         const active = document.getElementById('panel-' + currentPhase);
         if (active) active.classList.add('active');
       }
       setStatus('saved');
+
+      // After initial load, watch for changes from OTHER users only
+      db.ref('geely_content_2026').on('value', snapshot => {
+        if (ignoreNextSync) { ignoreNextSync = false; return; }
+        const v = snapshot.val();
+        if (v) {
+          Object.keys(v).forEach(k => { data[k] = v[k]; });
+          renderAll();
+          document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
+          const a = document.getElementById('panel-' + currentPhase);
+          if (a) a.classList.add('active');
+        }
+        setStatus('saved');
+      });
+
     }, err => {
       console.warn('Firebase read error:', err);
       setStatus('offline');
@@ -1172,17 +1186,16 @@ function initFirebase() {
 // ─── SAVE ───────────────────────────────────────────────────────────────
 function saveData() {
   if (syncEnabled && db) {
+    ignoreNextSync = true; // don't re-render on our own write
     setStatus('saving');
     db.ref('geely_content_2026').set(data)
-      .then(() => { showToast('تم الحفظ على Firebase ✓'); setStatus('saved'); })
-      .catch(e => { showToast('خطأ في الحفظ: ' + e.message); setStatus('offline'); });
+      .then(() => { setStatus('saved'); })
+      .catch(e => { showToast('خطأ: ' + e.message); setStatus('offline'); ignoreNextSync = false; });
   } else {
-    // Fallback to localStorage
     try {
       localStorage.setItem('geely_content_2026', JSON.stringify(data));
-      showToast('تم الحفظ محلياً ✓');
       setStatus('saved');
-    } catch(e) { showToast('خطأ في الحفظ'); }
+    } catch(e) {}
   }
 }
 
