@@ -1060,19 +1060,9 @@ function removeMedia(phaseId, cardId, idx) {
   `).join('');
 }
 
-function updateCard(phaseId, cardId, field, val) {
-  const card = data[phaseId].find(c => c.id === cardId);
-  if (card) card[field] = val;
-  setStatus('unsaved');
-}
 
-function deleteCard(phaseId, cardId) {
-  if (!confirm('تحذف هذا المحتوى؟')) return;
-  data[phaseId] = data[phaseId].filter(c => c.id !== cardId);
-  const el = document.getElementById('card-' + cardId);
-  if (el) el.remove();
-  showToast('تم الحذف');
-}
+
+
 
 function autoResize(el) {
   el.style.height = 'auto';
@@ -1091,36 +1081,6 @@ function closeModal(id) {
   document.getElementById(id).classList.remove('open');
 }
 
-function addCard() {
-  const phaseId = document.getElementById('add-phase').value;
-  const platform = document.getElementById('add-platform').value;
-  const layer = document.getElementById('add-layer').value;
-  const type = document.getElementById('add-type').value.trim();
-  const desc = document.getElementById('add-desc').value.trim();
-  const tag = document.getElementById('add-tag').value.trim();
-  const media = document.getElementById('add-media').value.trim();
-
-  if (!type) { document.getElementById('add-type').focus(); return; }
-
-  const card = { id: uid(), platform, layer, type, desc, tag, media: media ? [media] : [] };
-  if (!data[phaseId]) data[phaseId] = [];
-  data[phaseId].push(card);
-
-  closeModal('modal-add');
-  document.getElementById('add-type').value = '';
-  document.getElementById('add-desc').value = '';
-  document.getElementById('add-tag').value = '';
-  document.getElementById('add-media').value = '';
-
-  // If same phase is visible, re-render
-  if (phaseId === currentPhase) {
-    const panel = document.getElementById('panel-' + currentPhase);
-    if (panel) panel.innerHTML = buildPanel(currentPhase);
-  }
-  showToast('تمت الإضافة ✓');
-  setStatus('unsaved');
-}
-
 // ─── FIREBASE CONFIG ────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyDQ_D-W0iLO075-P7xjahmWJ3av-f-6mck",
@@ -1136,7 +1096,6 @@ const firebaseConfig = {
 let db = null;
 let syncEnabled = false;
 let saveTimeout = null;
-let ignoreNextSync = false; // prevent re-render on own writes
 
 function initFirebase() {
   try {
@@ -1145,36 +1104,23 @@ function initFirebase() {
     syncEnabled = true;
     setStatus('connecting');
 
-    // Listen ONCE on load to pull current data, then watch for remote changes
-    db.ref('geely_content_2026').once('value', snapshot => {
-      const val = snapshot.val();
-      if (val) {
-        Object.keys(val).forEach(k => { data[k] = val[k]; });
-        renderAll();
-        document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
-        const active = document.getElementById('panel-' + currentPhase);
-        if (active) active.classList.add('active');
-      }
-      setStatus('saved');
-
-      // After initial load, watch for changes from OTHER users only
-      db.ref('geely_content_2026').on('value', snapshot => {
-        if (ignoreNextSync) { ignoreNextSync = false; return; }
-        const v = snapshot.val();
-        if (v) {
-          Object.keys(v).forEach(k => { data[k] = v[k]; });
+    // Load once on start only — no realtime listener
+    db.ref('geely_content_2026').once('value')
+      .then(snapshot => {
+        const val = snapshot.val();
+        if (val) {
+          Object.keys(val).forEach(k => { data[k] = val[k]; });
           renderAll();
           document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
-          const a = document.getElementById('panel-' + currentPhase);
-          if (a) a.classList.add('active');
+          const active = document.getElementById('panel-' + currentPhase);
+          if (active) active.classList.add('active');
         }
         setStatus('saved');
+      })
+      .catch(err => {
+        console.warn('Firebase error:', err);
+        setStatus('offline');
       });
-
-    }, err => {
-      console.warn('Firebase read error:', err);
-      setStatus('offline');
-    });
 
   } catch(e) {
     console.warn('Firebase init failed:', e);
@@ -1183,71 +1129,39 @@ function initFirebase() {
   }
 }
 
-// ─── SAVE ───────────────────────────────────────────────────────────────
-function saveData() {
-  if (syncEnabled && db) {
-    ignoreNextSync = true; // don't re-render on our own write
-    setStatus('saving');
-    db.ref('geely_content_2026').set(data)
-      .then(() => { setStatus('saved'); })
-      .catch(e => { showToast('خطأ: ' + e.message); setStatus('offline'); ignoreNextSync = false; });
-  } else {
-    try {
-      localStorage.setItem('geely_content_2026', JSON.stringify(data));
-      setStatus('saved');
-    } catch(e) {}
-  }
+// Write a single phase directly — no listener will fire
+function writePhase(phaseId) {
+  if (!syncEnabled || !db) return;
+  setStatus('saving');
+  const phaseData = data[phaseId] || [];
+  db.ref('geely_content_2026/' + phaseId).set(phaseData)
+    .then(() => { setStatus('saved'); })
+    .catch(e => { setStatus('offline'); showToast('خطأ في الحفظ'); });
 }
 
-// Auto-save with debounce after any edit
+// Save all phases
+function saveData() {
+  if (!syncEnabled || !db) return;
+  setStatus('saving');
+  db.ref('geely_content_2026').set(data)
+    .then(() => { setStatus('saved'); showToast('تم الحفظ ✓'); })
+    .catch(e => { setStatus('offline'); });
+}
+
+// Auto-save text edits with debounce
 function autoSave() {
   clearTimeout(saveTimeout);
   setStatus('unsaved');
-  saveTimeout = setTimeout(() => saveData(), 1500);
+  saveTimeout = setTimeout(() => saveData(), 2000);
 }
 
-// Override updateCard to trigger autoSave
-const _origUpdateCard = updateCard;
 function updateCard(phaseId, cardId, field, val) {
-  const card = data[phaseId].find(c => c.id === cardId);
+  const card = (data[phaseId] || []).find(c => c.id === cardId);
   if (card) card[field] = val;
   autoSave();
 }
 
-function setStatus(s) {
-  const el = document.getElementById('save-status');
-  const states = {
-    saved:       { text: '● synced', color: 'var(--green)' },
-    unsaved:     { text: '● unsaved', color: 'var(--amber)' },
-    saving:      { text: '● saving...', color: 'var(--amber)' },
-    connecting:  { text: '● connecting...', color: 'var(--text2)' },
-    offline:     { text: '● offline', color: 'var(--red)' },
-  };
-  const st = states[s] || states.offline;
-  el.textContent = st.text;
-  el.style.color = st.color;
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// Close modal on overlay click
-document.getElementById('modal-add').addEventListener('click', function(e) {
-  if (e.target === this) closeModal('modal-add');
-});
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
-  }
-});
-
-// Override addCard & deleteCard to auto-save
-const _origAddCard = addCard;
+// ─── ADD CARD ────────────────────────────────────────────────────────────
 function addCard() {
   const phaseId = document.getElementById('add-phase').value;
   const platform = document.getElementById('add-platform').value;
@@ -1267,18 +1181,49 @@ function addCard() {
     if (panel) panel.innerHTML = buildPanel(currentPhase);
   }
   showToast('تمت الإضافة ✓');
-  saveData();
+  writePhase(phaseId);
 }
 
-const _origDeleteCard = deleteCard;
+// ─── DELETE CARD ─────────────────────────────────────────────────────────
 function deleteCard(phaseId, cardId) {
   if (!confirm('تحذف هذا المحتوى؟')) return;
-  data[phaseId] = data[phaseId].filter(c => c.id !== cardId);
+  data[phaseId] = (data[phaseId] || []).filter(c => c.id !== cardId);
   const el = document.getElementById('card-' + cardId);
   if (el) el.remove();
-  showToast('تم الحذف');
-  saveData();
+  showToast('تم الحذف ✓');
+  writePhase(phaseId);
 }
+
+function setStatus(s) {
+  const el = document.getElementById('save-status');
+  const states = {
+    saved:      { text: '● synced', color: 'var(--green)' },
+    unsaved:    { text: '● unsaved', color: 'var(--amber)' },
+    saving:     { text: '● saving...', color: 'var(--amber)' },
+    connecting: { text: '● connecting...', color: 'var(--text2)' },
+    offline:    { text: '● offline', color: 'var(--red)' },
+  };
+  const st = states[s] || states.offline;
+  el.textContent = st.text;
+  el.style.color = st.color;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+document.getElementById('modal-add').addEventListener('click', function(e) {
+  if (e.target === this) closeModal('modal-add');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+  }
+});
 
 // ─── INIT ────────────────────────────────────────────────────────────────
 renderAll();
