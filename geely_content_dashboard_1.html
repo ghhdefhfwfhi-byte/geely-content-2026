@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geely × Watad — Content Dashboard 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #18181f;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #f0eff8;
+  --text2: #8888a0;
+  --text3: #55556a;
+  --accent: #3d6bff;
+  --accent2: #7c4dff;
+  --green: #00e5a0;
+  --amber: #f5a623;
+  --red: #ff4d6a;
+  --meta: #1877F2;
+  --tiktok: #69c9d0;
+  --yt: #FF0000;
+  --google: #4285F4;
+  --phase1: #3d6bff;
+  --phase2: #7c4dff;
+  --phase3: #f5a623;
+  --phase4c: #00e5a0;
+  --phase4e: #ff4d6a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(61,107,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,107,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* TOP NAV */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.nav-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.nav-meta {
+  font-size: 12px;
+  color: var(--text2);
+  font-family: 'Space Mono', monospace;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn:hover { background: var(--bg2); border-color: var(--border-hover); }
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover { background: #5a84ff; border-color: #5a84ff; }
+
+/* PHASE TABS */
+.phase-bar {
+  position: relative;
+  z-index: 1;
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.phase-tab {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.phase-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.phase-tab:hover { border-color: var(--border-hover); color: var(--text); }
+.phase-tab.active { color: #fff; }
+.phase-tab[data-phase="1"].active { border-color: var(--phase1); background: rgba(61,107,255,0.15); }
+.phase-tab[data-phase="2"].active { border-color: var(--phase2); background: rgba(124,77,255,0.15); }
+.phase-tab[data-phase="3"].active { border-color: var(--phase3); background: rgba(245,166,35,0.15); }
+.phase-tab[data-phase="4c"].active { border-color: var(--phase4c); background: rgba(0,229,160,0.12); }
+.phase-tab[data-phase="4e"].active { border-color: var(--phase4e); background: rgba(255,77,106,0.12); }
+
+/* MAIN */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* PHASE HEADER */
+.phase-header-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.phase-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.phase-sub {
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.phase-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.badge-period { background: rgba(255,255,255,0.05); border-color: var(--border); color: var(--text2); }
+.badge-budget { background: rgba(0,229,160,0.1); border-color: rgba(0,229,160,0.3); color: var(--green); }
+.badge-obj { background: rgba(61,107,255,0.1); border-color: rgba(61,107,255,0.3); color: #7fa3ff; }
+
+.kpi-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kpi-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  text-align: center;
+  min-width: 90px;
+}
+
+.kpi-label { font-size: 10px; color: var(--text3); margin-bottom: 4px; font-family: 'Space Mono', monospace; }
+.kpi-val { font-size: 18px; font-weight: 700; color: var(--text); }
+
+/* SECTION HEADER */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Space Mono', monospace;
+}
+
+/* LAYER SECTION */
+.layer-section {
+  margin-bottom: 2rem;
+}
+
+.layer-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* CARDS GRID */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+
+.content-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.content-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.card-top {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-platform-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+}
+
+.card-body { padding: 12px 16px; }
+
+.card-type {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.4;
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  resize: none;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  min-height: 50px;
+}
+
+.card-type:focus, .card-desc:focus {
+  color: var(--text);
+}
+
+.card-footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.card-tag {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+  outline: none;
+  background: transparent;
+  border: none;
+  width: 140px;
+  color: var(--text3);
+  font-family: 'Space Mono', monospace;
+}
+
+.card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+
+.icon-btn:hover { background: var(--bg); color: var(--text); border-color: var(--border-hover); }
+.icon-btn.danger:hover { background: rgba(255,77,106,0.15); color: var(--red); border-color: rgba(255,77,106,0.4); }
+
+/* MEDIA SECTION inside card */
+.card-media {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+
+.card-media.open { display: block; }
+
+.media-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.media-input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--text);
+  font-size: 12px;
+  font-family: 'Space Mono', monospace;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.media-input:focus { border-color: var(--accent); }
+.media-input::placeholder { color: var(--text3); }
+
+.media-btn {
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: rgba(61,107,255,0.15);
+  color: #7fa3ff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.media-btn:hover { background: rgba(61,107,255,0.25); }
+
+.media-items { display: flex; flex-direction: column; gap: 6px; }
+
+.media-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.media-item-icon { font-size: 14px; flex-shrink: 0; }
+
+.media-item-link {
+  font-size: 11px;
+  color: #7fa3ff;
+  font-family: 'Space Mono', monospace;
+  text-decoration: none;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.media-item-link:hover { color: var(--accent); }
+
+.media-item-del {
+  font-size: 11px;
+  color: var(--text3);
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.media-item-del:hover { color: var(--red); }
+
+/* ADD CARD BUTTON */
+.add-card-btn {
+  background: var(--bg2);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text3);
+  font-size: 13px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: center;
+}
+
+.add-card-btn:hover { border-color: var(--border-hover); color: var(--text2); background: var(--bg3); }
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border-hover);
+  border-radius: 14px;
+  width: 480px;
+  max-width: 95vw;
+  padding: 1.5rem;
+  position: relative;
+  animation: modal-in 0.2s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.modal-close:hover { border-color: var(--red); color: var(--red); }
+
+.form-group { margin-bottom: 14px; }
+
+.form-label {
+  font-size: 11px;
+  color: var(--text2);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 70px; }
+.form-select { cursor: pointer; }
+.form-select option { background: var(--bg2); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+/* BUDGET BARS */
+.budget-section {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.budget-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.budget-row:last-child { margin-bottom: 0; }
+
+.budget-platform {
+  font-size: 12px;
+  font-family: 'Space Mono', monospace;
+  color: var(--text2);
+  width: 70px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.budget-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.budget-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.budget-val {
+  font-size: 12px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  width: 55px;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+/* PHASE PANELS */
+.phase-panel { display: none; }
+.phase-panel.active { display: block; animation: fadein 0.25s ease; }
+@keyframes fadein { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--bg3);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: var(--green);
+  z-index: 2000;
+  transition: transform 0.3s ease;
+  font-family: 'Space Mono', monospace;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* PLATFORM COLORS */
+.plt-meta { background: rgba(24,119,242,0.15); color: #7fa3ff; }
+.plt-tiktok { background: rgba(105,201,208,0.15); color: var(--tiktok); }
+.plt-yt { background: rgba(255,0,0,0.15); color: #ff8080; }
+.plt-google { background: rgba(66,133,244,0.15); color: #7fa3ff; }
+.plt-all { background: rgba(255,255,255,0.08); color: var(--text2); }
+
+/* RESPONSIVE */
+@media(max-width:640px) {
+  main { padding: 1rem; }
+  .phase-header-card { flex-direction: column; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .topnav { padding: 0 1rem; }
+  .phase-bar { padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-logo">
+    <span class="nav-logo-badge">WATAD</span>
+    <span class="nav-title">Geely Content Plan 2026</span>
+  </div>
+  <div class="nav-meta" id="save-status">ready</div>
+  <div class="nav-actions">
+    <button class="btn" onclick="openAddModal()">+ إضافة محتوى</button>
+    <button class="btn btn-primary" onclick="saveData()">💾 حفظ</button>
+  </div>
+</nav>
+
+<!-- PHASE TABS -->
+<div class="phase-bar">
+  <button class="phase-tab active" data-phase="1" onclick="switchPhase('1', this)">
+    <span class="phase-dot" style="background:var(--phase1)"></span> Phase 1 — Awareness
+  </button>
+  <button class="phase-tab" data-phase="2" onclick="switchPhase('2', this)">
+    <span class="phase-dot" style="background:var(--phase2)"></span> Phase 2 — Teaser
+  </button>
+  <button class="phase-tab" data-phase="3" onclick="switchPhase('3', this)">
+    <span class="phase-dot" style="background:var(--phase3)"></span> Phase 3 — Pre-Order
+  </button>
+  <button class="phase-tab" data-phase="4c" onclick="switchPhase('4c', this)">
+    <span class="phase-dot" style="background:var(--phase4c)"></span> Phase 4 — Coolray
+  </button>
+  <button class="phase-tab" data-phase="4e" onclick="switchPhase('4e', this)">
+    <span class="phase-dot" style="background:var(--phase4e)"></span> Phase 4 — Emgrand
+  </button>
+</div>
+
+<main id="main-content"></main>
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <div class="modal-title">
+      إضافة محتوى جديد
+      <button class="modal-close" onclick="closeModal('modal-add')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">PHASE</label>
+      <select class="form-select" id="add-phase">
+        <option value="1">Phase 1 — Brand Awareness</option>
+        <option value="2">Phase 2 — Teaser</option>
+        <option value="3">Phase 3 — Pre-Order</option>
+        <option value="4c">Phase 4 — Coolray</option>
+        <option value="4e">Phase 4 — Emgrand</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">المنصة</label>
+        <select class="form-select" id="add-platform">
+          <option>Meta</option>
+          <option>TikTok</option>
+          <option>YouTube</option>
+          <option>Google</option>
+          <option>All Platforms</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">الطبقة</label>
+        <select class="form-select" id="add-layer">
+          <option>Awareness</option>
+          <option>Consideration</option>
+          <option>Conversion</option>
+          <option>General</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">نوع المحتوى</label>
+      <input class="form-input" id="add-type" placeholder="مثال: Short Video 15s — Lifestyle" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">الوصف</label>
+      <textarea class="form-textarea" id="add-desc" placeholder="وصف الفكرة والهدف منها..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">التاق / المنصة المستهدفة</label>
+      <input class="form-input" id="add-tag" placeholder="Meta Reels + TikTok — 15s" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">لينك أو فيديو (اختياري)</label>
+      <input class="form-input" id="add-media" placeholder="https://..." />
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-add')">إلغاء</button>
+      <button class="btn btn-primary" onclick="addCard()">+ إضافة</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const phaseConfig = {
+  '1':  { name:'Phase 1 — Brand Awareness', sub:'بناء الوعي بالبراند قبل الكشف عن أي موديل', period:'May W1 – Jun W4', budget:'$10,000', obj:'Awareness — CPM', color:'#3d6bff', kpis:[{l:'Reach',v:'1.65M'},{l:'Impressions',v:'5.67M'},{l:'Clicks',v:'83.7K'},{l:'CPM',v:'~$1.76'}], budgets:[{p:'Meta',pct:70,color:'#1877F2',val:'$7,000'},{p:'YouTube',pct:10,color:'#FF0000',val:'$1,000'},{p:'TikTok',pct:20,color:'#69c9d0',val:'$2,000'}] },
+  '2':  { name:'Phase 2 — Teaser', sub:'إثارة الفضول وبناء الترقب — كشف جزئي تدريجي', period:'May W2 – May W3', budget:'$4,000', obj:'Teaser — CPM', color:'#7c4dff', kpis:[{l:'Reach',v:'660K'},{l:'Impressions',v:'2.27M'},{l:'Clicks',v:'33.5K'},{l:'Duration',v:'2 Weeks'}], budgets:[{p:'Meta',pct:70,color:'#1877F2',val:'$2,800'},{p:'YouTube',pct:10,color:'#FF0000',val:'$400'},{p:'TikTok',pct:20,color:'#69c9d0',val:'$800'}] },
+  '3':  { name:'Phase 3 — Pre-Order', sub:'تحويل الاهتمام إلى إجراء — جمع Leads وحجز مسبق', period:'May W3 – May W4', budget:'$4,000', obj:'Conversion — CPC', color:'#f5a623', kpis:[{l:'Reach',v:'49.7K'},{l:'Clicks',v:'10.7K'},{l:'Leads',v:'360'},{l:'CPL',v:'$11.1'}], budgets:[{p:'Google',pct:10,color:'#4285F4',val:'$400'},{p:'Meta',pct:70,color:'#1877F2',val:'$2,800'},{p:'TikTok',pct:20,color:'#69c9d0',val:'$800'}] },
+  '4c': { name:'Phase 4 — Coolray Launch', sub:'إطلاق وتثبيت Coolray — ثلاث طبقات متكاملة', period:'Jun W1 – Aug W4', budget:'$15,000', obj:'Launch & Sustain — 12 Weeks', color:'#00e5a0', kpis:[{l:'Reach',v:'2.79M'},{l:'Impressions',v:'9.97M'},{l:'Leads',v:'2,057'},{l:'CPL',v:'~$4.6'}], budgets:[{p:'Meta',pct:70,color:'#1877F2',val:'$10,500'},{p:'TikTok',pct:20,color:'#69c9d0',val:'$3,000'},{p:'Google',pct:7,color:'#4285F4',val:'$1,050'},{p:'YouTube',pct:3,color:'#FF0000',val:'$450'}] },
+  '4e': { name:'Phase 4 — Emgrand Launch', sub:'إطلاق وتثبيت Emgrand — محتوى يناسب شخصيته الـ Premium', period:'Jun W1 – Aug W4', budget:'$15,000', obj:'Launch & Sustain — 12 Weeks', color:'#ff4d6a', kpis:[{l:'Reach',v:'2.79M'},{l:'Impressions',v:'9.97M'},{l:'Leads',v:'2,057'},{l:'CPL',v:'~$4.6'}], budgets:[{p:'Meta',pct:70,color:'#1877F2',val:'$10,500'},{p:'TikTok',pct:20,color:'#69c9d0',val:'$3,000'},{p:'Google',pct:7,color:'#4285F4',val:'$1,050'},{p:'YouTube',pct:3,color:'#FF0000',val:'$450'}] },
+};
+
+const platformClass = { 'Meta':'plt-meta','TikTok':'plt-tiktok','YouTube':'plt-yt','Google':'plt-google','All Platforms':'plt-all' };
+
+let data = {
+  '1': [
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Image / Carousel / Short Video', desc:'محتوى بصري راقي يعرّف بهوية Geely — جودة الصناعة، التصميم، القيم', tag:'Meta IG/FB — 30s', media:[] },
+    { id:uid(), platform:'YouTube', layer:'Awareness', type:'Skippable In-stream Ads', desc:'فيديو براند 30 ثانية يحكي قصة Geely بدون ذكر موديل محدد', tag:'YouTube — Brand Film', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Awareness', type:'Short Video 15–20s', desc:'محتوى يجذب الجمهور الشاب — أسلوب حياة + تصميم السيارات', tag:'TikTok — In-Feed', media:[] },
+    { id:uid(), platform:'All Platforms', layer:'Awareness', type:'Brand Film — "Made for your world"', desc:'فيديو براند يحكي قصة Geely من الصين للعالم بدون عرض موديل محدد', tag:'Meta + YouTube — 30s', media:[] },
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Carousel — تفاصيل التصميم', desc:'صور عالية الجودة لتفاصيل Geely — كل صورة تعرض تفصيلة مختلفة', tag:'Meta IG/FB', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Awareness', type:'Trend-Based — Before vs After', desc:'فيديو "Before vs After" يعرض مشهد حياة يومي مع سيارة Geely', tag:'TikTok — 15s', media:[] },
+  ],
+  '2': [
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Teaser Video 10–15s — Partial Reveal', desc:'كشف جزئي للسيارة — ظلال، تفاصيل مصابيح، سطح السيارة — بدون عرض الشكل الكامل', tag:'Meta IG/FB — Teaser', media:[] },
+    { id:uid(), platform:'YouTube', layer:'Awareness', type:'Teaser In-stream 20s — Logo Reveal', desc:'ينتهي الفيديو بظهور شعار Geely فقط — يبني التشويق بدون كشف', tag:'YouTube — Logo Only', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Awareness', type:'Sound-Led Reveal', desc:'صوت المحرك أو الباب + مشهد درامي — يخلق فضول بالصوت قبل الصورة', tag:'TikTok — Sound Teaser', media:[] },
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Countdown Story — "Something is coming"', desc:'عداد أيام يتراجع حتى يوم الإطلاق — يُحدَّث يومياً', tag:'Meta Stories — Daily Update', media:[] },
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Close-up Carousel — "أي سيارة هذه؟"', desc:'Close-up لتفاصيل السيارة — يخلق engagement ويبني anticipation', tag:'Meta IG — Engagement', media:[] },
+  ],
+  '3': [
+    { id:uid(), platform:'Meta', layer:'Conversion', type:'In-App Lead + Website Lead (A/B)', desc:'نموذج داخل Meta للحجز المسبق + Landing Page — A/B بين الاثنين', tag:'Meta — CPC $0.35–$0.5 — 244 Leads', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Conversion', type:'Direct Lead + Website Lead (A/B)', desc:'نموذج TikTok Lead Gen + Website — CTA "احجز الآن قبل الإطلاق"', tag:'TikTok — CPC $0.15–$0.4', media:[] },
+    { id:uid(), platform:'Google', layer:'Conversion', type:'Search Campaign — Pre-Order Intent', desc:'كلمات مفتاحية تستهدف من يبحث عن Geely أو سيارات جديدة', tag:'Google Search — 16 Leads', media:[] },
+    { id:uid(), platform:'All Platforms', layer:'Conversion', type:'Full Reveal Video + CTA "احجز أول واحد"', desc:'أول ظهور كامل للموديل مع عرض المميزات الرئيسية', tag:'Meta + TikTok — Launch Reveal', media:[] },
+    { id:uid(), platform:'Meta', layer:'Conversion', type:'Urgency Creative — "المقاعد محدودة"', desc:'عداد + CTA مباشر — يخلق urgency للتسجيل الآن — يستهدف الـ Warm Audience', tag:'Meta Stories — Retargeting', media:[] },
+  ],
+  '4c': [
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Image / Carousel / Short Video (20s features)', desc:'محتوى بصري يعرض مميزات Coolray — أسلوب شبابي وديناميكي', tag:'Meta IG/FB — Awareness CPM', media:[] },
+    { id:uid(), platform:'YouTube', layer:'Awareness', type:'Skippable In-stream (30s brand film)', desc:'Brand Film يعرض Coolray في بيئات متنوعة — شباب، مدينة، مغامرة', tag:'YouTube — Awareness', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Awareness', type:'Lifestyle Short Video (15-20s organic)', desc:'محتوى يشبه الـ Organic — "أول أسبوع مع Coolray"', tag:'TikTok — In-Feed', media:[] },
+    { id:uid(), platform:'Meta', layer:'Consideration', type:'Feature Deep-Dive — سلسلة 3 فيديوهات', desc:'كل فيديو يشرح مميزة واحدة بتفصيل — Safety, Tech, Design', tag:'Meta Lead Form — In-App', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Consideration', type:'Comparison — "ليش Coolray؟"', desc:'مقارنة Coolray بالفئة بأسلوب data-driven وجذاب', tag:'TikTok + Meta — CPC', media:[] },
+    { id:uid(), platform:'Meta', layer:'Conversion', type:'Retargeting — "Test Drive متاح الحين"', desc:'يستهدف زوار الموقع الذين لم يكملوا — Urgency Strong CTA', tag:'Meta Retargeting — A/B v1', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Conversion', type:'Urgency CTA (A/B v1)', desc:'Limited offer أو لون محدود — "فقط 50 سيارة بهذا اللون"', tag:'TikTok — Direct Lead', media:[] },
+    { id:uid(), platform:'Google', layer:'Conversion', type:'Search — Purchase Intent / Test Drive', desc:'"جرب Coolray مجاناً" → Lead Form مباشر — يستهدف الـ High Intent', tag:'Google Search — CPC $1.5', media:[] },
+  ],
+  '4e': [
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Brand Film — Executive Lifestyle 30s', desc:'أسلوب أكثر رسمية وراقي — يستهدف رجل الأعمال وعائلة الـ Mid-size Sedan', tag:'Meta + YouTube — Awareness', media:[] },
+    { id:uid(), platform:'Meta', layer:'Awareness', type:'Interior Showcase Carousel', desc:'الداخلية الفاخرة، شاشات التقنية، المقاعد الجلدية — بصور احترافية عالية الجودة', tag:'Meta IG/FB — CPM', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Awareness', type:'"Executive Lifestyle" — TikTok', desc:'فيديو يصور شخص ناجح يصل بـ Emgrand لاجتماع أو مناسبة', tag:'TikTok — 15-20s', media:[] },
+    { id:uid(), platform:'Meta', layer:'Consideration', type:'Emgrand vs Category — Specs Comparison', desc:'مقارنة بصرية: محرك، وقود، أمان — "ليش Emgrand؟"', tag:'Meta + TikTok — CPC', media:[] },
+    { id:uid(), platform:'Meta', layer:'Consideration', type:'Tech Feature Video — Infotainment System', desc:'نظام Infotainment + الشاشة الرقمية + الاتصال — يستهدف المهتمين بالتقنية', tag:'Meta Lead Form', media:[] },
+    { id:uid(), platform:'Meta', layer:'Conversion', type:'Retargeting — "احجز Test Drive لـ Emgrand"', desc:'لمن زار الصفحة ولم يكمل — CTA واضح ومباشر', tag:'Meta Retargeting', media:[] },
+    { id:uid(), platform:'TikTok', layer:'Conversion', type:'Identity CTA — "كن من أوائل الـ Emgrand owners"', desc:'يخاطب الـ Identity الشخصية ويخلق exclusivity حول الموديل', tag:'TikTok + Meta — Conversion', media:[] },
+    { id:uid(), platform:'Google', layer:'Conversion', type:'Search — "Emgrand سعر، مواصفات"', desc:'يستهدف الـ High Intent Search — يوجه لصفحة Lead مباشرة', tag:'Google Search — CPC $1.5', media:[] },
+  ]
+};
+
+let currentPhase = '1';
+
+// ─── UTILS ──────────────────────────────────────────────────────────────────
+function uid() { return '_' + Math.random().toString(36).slice(2,9); }
+
+function getPlatformClass(p) { return platformClass[p] || 'plt-all'; }
+
+function isVideo(url) {
+  return /youtube|youtu\.be|vimeo|tiktok|instagram|\.mp4|\.mov|\.webm/i.test(url);
+}
+
+function getMediaIcon(url) {
+  if (/youtube|youtu\.be/i.test(url)) return '▶';
+  if (/tiktok/i.test(url)) return '🎵';
+  if (/instagram/i.test(url)) return '📷';
+  if (/drive\.google/i.test(url)) return '📁';
+  if (/\.mp4|\.mov|\.webm/i.test(url)) return '🎬';
+  return '🔗';
+}
+
+function shortUrl(url) {
+  try { return new URL(url).hostname.replace('www.','') + '...'; } catch { return url.slice(0,30)+'...'; }
+}
+
+// ─── RENDER ─────────────────────────────────────────────────────────────────
+function renderAll() {
+  const main = document.getElementById('main-content');
+  main.innerHTML = '';
+
+  Object.keys(phaseConfig).forEach(phaseId => {
+    const panel = document.createElement('div');
+    panel.className = 'phase-panel' + (phaseId === currentPhase ? ' active' : '');
+    panel.id = 'panel-' + phaseId;
+    panel.innerHTML = buildPanel(phaseId);
+    main.appendChild(panel);
+  });
+}
+
+function buildPanel(phaseId) {
+  const cfg = phaseConfig[phaseId];
+  const cards = data[phaseId] || [];
+
+  const budgetBars = cfg.budgets.map(b => `
+    <div class="budget-row">
+      <span class="budget-platform">${b.p}</span>
+      <div class="budget-track"><div class="budget-fill" style="width:${b.pct}%;background:${b.color}"></div></div>
+      <span class="budget-val" style="color:${b.color}">${b.val}</span>
+    </div>
+  `).join('');
+
+  const kpiBoxes = cfg.kpis.map(k => `
+    <div class="kpi-box">
+      <div class="kpi-label">${k.l}</div>
+      <div class="kpi-val">${k.v}</div>
+    </div>
+  `).join('');
+
+  // Group by layer
+  const layers = {};
+  cards.forEach(c => {
+    const l = c.layer || 'General';
+    if (!layers[l]) layers[l] = [];
+    layers[l].push(c);
+  });
+
+  const layerColors = { 'Awareness':'rgba(61,107,255,0.12)','Consideration':'rgba(245,166,35,0.1)','Conversion':'rgba(0,229,160,0.1)','General':'rgba(255,255,255,0.05)' };
+  const layerText = { 'Awareness':'#7fa3ff','Consideration':'#f5c06a','Conversion':'#00e5a0','General':'#8888a0' };
+
+  let layerSections = '';
+  const order = ['Awareness','Consideration','Conversion','General'];
+  order.forEach(layer => {
+    if (!layers[layer]) return;
+    const cardsList = layers[layer].map(c => buildCard(c, phaseId)).join('');
+    layerSections += `
+      <div class="layer-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div class="layer-label" style="background:${layerColors[layer]};color:${layerText[layer]};border:1px solid ${layerText[layer]}33">
+            <span>${layer}</span>
+            <span style="font-size:10px;opacity:0.7">${layers[layer].length} محتوى</span>
+          </div>
+        </div>
+        <div class="cards-grid">${cardsList}
+          <button class="add-card-btn" onclick="openAddModal('${phaseId}','${layer}')">
+            <span style="font-size:18px;opacity:0.5">+</span> إضافة محتوى جديد
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  if (!layerSections) {
+    layerSections = `<div class="cards-grid">
+      <button class="add-card-btn" onclick="openAddModal('${phaseId}','General')">
+        <span style="font-size:18px;opacity:0.5">+</span> إضافة أول محتوى لهذه الـ Phase
+      </button>
+    </div>`;
+  }
+
+  return `
+    <div class="phase-header-card" style="border-color:${cfg.color}22;box-shadow:0 0 0 1px ${cfg.color}11">
+      <div>
+        <div class="phase-name" style="color:${cfg.color}">${cfg.name}</div>
+        <div class="phase-sub">${cfg.sub}</div>
+        <div class="phase-badges">
+          <span class="badge badge-period">📅 ${cfg.period}</span>
+          <span class="badge badge-budget">💰 ${cfg.budget}</span>
+          <span class="badge badge-obj">🎯 ${cfg.obj}</span>
+        </div>
+      </div>
+      <div class="kpi-row">${kpiBoxes}</div>
+    </div>
+
+    <div class="budget-section">
+      <div class="section-title" style="margin-bottom:12px">توزيع الميزانية</div>
+      ${budgetBars}
+    </div>
+
+    ${layerSections}
+  `;
+}
+
+function buildCard(c, phaseId) {
+  const pClass = getPlatformClass(c.platform);
+  const mediaItems = (c.media||[]).map((m,i) => `
+    <div class="media-item">
+      <span class="media-item-icon">${getMediaIcon(m)}</span>
+      <a class="media-item-link" href="${m}" target="_blank" title="${m}">${shortUrl(m)}</a>
+      <span class="media-item-del" onclick="removeMedia('${phaseId}','${c.id}',${i})" title="حذف">✕</span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="content-card" id="card-${c.id}">
+      <div class="card-top">
+        <div>
+          <span class="card-platform-badge ${pClass}">${c.platform}</span>
+        </div>
+        <div class="card-actions">
+          <button class="icon-btn" onclick="toggleMedia('${c.id}')" title="إضافة لينك/فيديو">🔗</button>
+          <button class="icon-btn danger" onclick="deleteCard('${phaseId}','${c.id}')" title="حذف">✕</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <textarea class="card-type" rows="1" oninput="updateCard('${phaseId}','${c.id}','type',this.value);autoResize(this)" onload="autoResize(this)">${escHtml(c.type)}</textarea>
+        <textarea class="card-desc" rows="3" oninput="updateCard('${phaseId}','${c.id}','desc',this.value)">${escHtml(c.desc)}</textarea>
+      </div>
+      <div class="card-footer">
+        <input class="card-tag" value="${escHtml(c.tag||'')}" placeholder="tag / platform" oninput="updateCard('${phaseId}','${c.id}','tag',this.value)">
+      </div>
+      <div class="card-media" id="media-${c.id}">
+        <div class="media-input-row">
+          <input class="media-input" id="mi-${c.id}" placeholder="https://youtube.com/... أو أي لينك" />
+          <button class="media-btn" onclick="addMedia('${phaseId}','${c.id}')">+ إضافة</button>
+        </div>
+        <div class="media-items" id="ml-${c.id}">${mediaItems}</div>
+      </div>
+    </div>
+  `;
+}
+
+function escHtml(str) {
+  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────
+function switchPhase(id, btn) {
+  currentPhase = id;
+  document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.phase-tab').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleMedia(cardId) {
+  const el = document.getElementById('media-' + cardId);
+  el.classList.toggle('open');
+}
+
+function addMedia(phaseId, cardId) {
+  const input = document.getElementById('mi-' + cardId);
+  const url = input.value.trim();
+  if (!url) return;
+  const card = data[phaseId].find(c => c.id === cardId);
+  if (!card) return;
+  if (!card.media) card.media = [];
+  card.media.push(url);
+  input.value = '';
+  const list = document.getElementById('ml-' + cardId);
+  const i = card.media.length - 1;
+  const item = document.createElement('div');
+  item.className = 'media-item';
+  item.innerHTML = `
+    <span class="media-item-icon">${getMediaIcon(url)}</span>
+    <a class="media-item-link" href="${url}" target="_blank">${shortUrl(url)}</a>
+    <span class="media-item-del" onclick="removeMedia('${phaseId}','${cardId}',${i})" title="حذف">✕</span>
+  `;
+  list.appendChild(item);
+  showToast('تم إضافة اللينك ✓');
+}
+
+function removeMedia(phaseId, cardId, idx) {
+  const card = data[phaseId].find(c => c.id === cardId);
+  if (!card) return;
+  card.media.splice(idx, 1);
+  // Re-render just the media list
+  const list = document.getElementById('ml-' + cardId);
+  list.innerHTML = card.media.map((m,i) => `
+    <div class="media-item">
+      <span class="media-item-icon">${getMediaIcon(m)}</span>
+      <a class="media-item-link" href="${m}" target="_blank">${shortUrl(m)}</a>
+      <span class="media-item-del" onclick="removeMedia('${phaseId}','${cardId}',${i})">✕</span>
+    </div>
+  `).join('');
+}
+
+function updateCard(phaseId, cardId, field, val) {
+  const card = data[phaseId].find(c => c.id === cardId);
+  if (card) card[field] = val;
+  setStatus('unsaved');
+}
+
+function deleteCard(phaseId, cardId) {
+  if (!confirm('تحذف هذا المحتوى؟')) return;
+  data[phaseId] = data[phaseId].filter(c => c.id !== cardId);
+  const el = document.getElementById('card-' + cardId);
+  if (el) el.remove();
+  showToast('تم الحذف');
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+// ─── ADD MODAL ───────────────────────────────────────────────────────────
+function openAddModal(phaseId, layer) {
+  if (phaseId) document.getElementById('add-phase').value = phaseId;
+  if (layer) document.getElementById('add-layer').value = layer;
+  document.getElementById('modal-add').classList.add('open');
+  document.getElementById('add-type').focus();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function addCard() {
+  const phaseId = document.getElementById('add-phase').value;
+  const platform = document.getElementById('add-platform').value;
+  const layer = document.getElementById('add-layer').value;
+  const type = document.getElementById('add-type').value.trim();
+  const desc = document.getElementById('add-desc').value.trim();
+  const tag = document.getElementById('add-tag').value.trim();
+  const media = document.getElementById('add-media').value.trim();
+
+  if (!type) { document.getElementById('add-type').focus(); return; }
+
+  const card = { id: uid(), platform, layer, type, desc, tag, media: media ? [media] : [] };
+  if (!data[phaseId]) data[phaseId] = [];
+  data[phaseId].push(card);
+
+  closeModal('modal-add');
+  document.getElementById('add-type').value = '';
+  document.getElementById('add-desc').value = '';
+  document.getElementById('add-tag').value = '';
+  document.getElementById('add-media').value = '';
+
+  // If same phase is visible, re-render
+  if (phaseId === currentPhase) {
+    const panel = document.getElementById('panel-' + currentPhase);
+    if (panel) panel.innerHTML = buildPanel(currentPhase);
+  }
+  showToast('تمت الإضافة ✓');
+  setStatus('unsaved');
+}
+
+// ─── FIREBASE CONFIG ────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDQ_D-W0iLO075-P7xjahmWJ3av-f-6mck",
+  authDomain: "geely-watad-v1-ads-format.firebaseapp.com",
+  databaseURL: "https://geely-watad-v1-ads-format-default-rtdb.firebaseio.com",
+  projectId: "geely-watad-v1-ads-format",
+  storageBucket: "geely-watad-v1-ads-format.appspot.com",
+  messagingSenderId: "783598053028",
+  appId: "1:783598053028:web:geelywatad2026"
+};
+
+// ─── FIREBASE INIT ──────────────────────────────────────────────────────
+let db = null;
+let syncEnabled = false;
+let saveTimeout = null;
+
+function initFirebase() {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    syncEnabled = true;
+    setStatus('connecting');
+
+    // Listen for real-time changes from Firebase
+    db.ref('geely_content_2026').on('value', snapshot => {
+      const val = snapshot.val();
+      if (val) {
+        // Merge incoming data without overwriting default structure
+        Object.keys(val).forEach(k => { data[k] = val[k]; });
+        renderAll();
+        // Re-apply active phase tab
+        document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
+        const active = document.getElementById('panel-' + currentPhase);
+        if (active) active.classList.add('active');
+      }
+      setStatus('saved');
+    }, err => {
+      console.warn('Firebase read error:', err);
+      setStatus('offline');
+    });
+
+  } catch(e) {
+    console.warn('Firebase init failed:', e);
+    syncEnabled = false;
+    setStatus('offline');
+  }
+}
+
+// ─── SAVE ───────────────────────────────────────────────────────────────
+function saveData() {
+  if (syncEnabled && db) {
+    setStatus('saving');
+    db.ref('geely_content_2026').set(data)
+      .then(() => { showToast('تم الحفظ على Firebase ✓'); setStatus('saved'); })
+      .catch(e => { showToast('خطأ في الحفظ: ' + e.message); setStatus('offline'); });
+  } else {
+    // Fallback to localStorage
+    try {
+      localStorage.setItem('geely_content_2026', JSON.stringify(data));
+      showToast('تم الحفظ محلياً ✓');
+      setStatus('saved');
+    } catch(e) { showToast('خطأ في الحفظ'); }
+  }
+}
+
+// Auto-save with debounce after any edit
+function autoSave() {
+  clearTimeout(saveTimeout);
+  setStatus('unsaved');
+  saveTimeout = setTimeout(() => saveData(), 1500);
+}
+
+// Override updateCard to trigger autoSave
+const _origUpdateCard = updateCard;
+function updateCard(phaseId, cardId, field, val) {
+  const card = data[phaseId].find(c => c.id === cardId);
+  if (card) card[field] = val;
+  autoSave();
+}
+
+function setStatus(s) {
+  const el = document.getElementById('save-status');
+  const states = {
+    saved:       { text: '● synced', color: 'var(--green)' },
+    unsaved:     { text: '● unsaved', color: 'var(--amber)' },
+    saving:      { text: '● saving...', color: 'var(--amber)' },
+    connecting:  { text: '● connecting...', color: 'var(--text2)' },
+    offline:     { text: '● offline', color: 'var(--red)' },
+  };
+  const st = states[s] || states.offline;
+  el.textContent = st.text;
+  el.style.color = st.color;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Close modal on overlay click
+document.getElementById('modal-add').addEventListener('click', function(e) {
+  if (e.target === this) closeModal('modal-add');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+  }
+});
+
+// Override addCard & deleteCard to auto-save
+const _origAddCard = addCard;
+function addCard() {
+  const phaseId = document.getElementById('add-phase').value;
+  const platform = document.getElementById('add-platform').value;
+  const layer = document.getElementById('add-layer').value;
+  const type = document.getElementById('add-type').value.trim();
+  const desc = document.getElementById('add-desc').value.trim();
+  const tag = document.getElementById('add-tag').value.trim();
+  const media = document.getElementById('add-media').value.trim();
+  if (!type) { document.getElementById('add-type').focus(); return; }
+  const card = { id: uid(), platform, layer, type, desc, tag, media: media ? [media] : [] };
+  if (!data[phaseId]) data[phaseId] = [];
+  data[phaseId].push(card);
+  closeModal('modal-add');
+  ['add-type','add-desc','add-tag','add-media'].forEach(id => document.getElementById(id).value = '');
+  if (phaseId === currentPhase) {
+    const panel = document.getElementById('panel-' + currentPhase);
+    if (panel) panel.innerHTML = buildPanel(currentPhase);
+  }
+  showToast('تمت الإضافة ✓');
+  saveData();
+}
+
+const _origDeleteCard = deleteCard;
+function deleteCard(phaseId, cardId) {
+  if (!confirm('تحذف هذا المحتوى؟')) return;
+  data[phaseId] = data[phaseId].filter(c => c.id !== cardId);
+  const el = document.getElementById('card-' + cardId);
+  if (el) el.remove();
+  showToast('تم الحذف');
+  saveData();
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────
+renderAll();
+setStatus('connecting');
+initFirebase();
+</script>
+
+
+</body>
+</html>
