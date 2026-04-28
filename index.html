@@ -474,6 +474,34 @@ main {
 
 .media-item-del:hover { color: var(--red); }
 
+.media-item-note {
+  font-size: 13px;
+  color: var(--text2);
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  outline: none;
+  width: 100%;
+  margin-top: 6px;
+  direction: rtl;
+  min-height: 60px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.media-item-note:focus {
+  border-color: var(--accent);
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+}
+
+.media-item-note:focus { color: var(--text); }
+.media-item-note::placeholder { color: var(--text3); }
+
+.media-item-inner { flex: 1; min-width: 0; }
+
 /* ADD CARD BUTTON */
 .add-card-btn {
   background: var(--bg2);
@@ -967,13 +995,21 @@ function buildPanel(phaseId) {
 
 function buildCard(c, phaseId) {
   const pClass = getPlatformClass(c.platform);
-  const mediaItems = (c.media||[]).map((m,i) => `
-    <div class="media-item">
-      <span class="media-item-icon">${getMediaIcon(m)}</span>
-      <a class="media-item-link" href="${m}" target="_blank" title="${m}">${shortUrl(m)}</a>
-      <span class="media-item-del" onclick="removeMedia('${phaseId}','${c.id}',${i})" title="حذف">✕</span>
-    </div>
-  `).join('');
+  const mediaItems = (c.media||[]).map((m,i) => {
+    const url = typeof m === 'object' ? m.url : m;
+    const note = typeof m === 'object' ? (m.note||'') : '';
+    return `
+    <div class="media-item" style="flex-direction:column;align-items:stretch;gap:5px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="media-item-icon">${getMediaIcon(url)}</span>
+        <div class="media-item-inner">
+          <a class="media-item-link" href="${url}" target="_blank" title="${url}">${shortUrl(url)}</a>
+        </div>
+        <span class="media-item-del" onclick="removeMedia('${phaseId}','${c.id}',${i})" title="حذف">✕</span>
+      </div>
+      <textarea class="media-item-note" placeholder="اكتب وصف للرابط أو الفيديو..." oninput="updateMediaNote('${phaseId}','${c.id}',${i},this.value)">${escHtml(note)}</textarea>
+    </div>`;
+  }).join('');
 
   return `
     <div class="content-card" id="card-${c.id}">
@@ -997,6 +1033,9 @@ function buildCard(c, phaseId) {
         <div class="media-input-row">
           <input class="media-input" id="mi-${c.id}" placeholder="https://youtube.com/... أو أي لينك" />
           <button class="media-btn" onclick="addMedia('${phaseId}','${c.id}')">+ إضافة</button>
+        </div>
+        <div class="media-input-row" style="margin-bottom:10px">
+          <input class="media-input" id="mn-${c.id}" placeholder="وصف الرابط أو الفيديو (اختياري)" style="font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl" />
         </div>
         <div class="media-items" id="ml-${c.id}">${mediaItems}</div>
       </div>
@@ -1024,40 +1063,73 @@ function toggleMedia(cardId) {
 }
 
 function addMedia(phaseId, cardId) {
-  const input = document.getElementById('mi-' + cardId);
-  const url = input.value.trim();
+  const urlInput = document.getElementById('mi-' + cardId);
+  const noteInput = document.getElementById('mn-' + cardId);
+  const url = urlInput.value.trim();
   if (!url) return;
+  const note = noteInput ? noteInput.value.trim() : '';
   const card = data[phaseId].find(c => c.id === cardId);
   if (!card) return;
   if (!card.media) card.media = [];
-  card.media.push(url);
-  input.value = '';
+  const mediaObj = { url, note };
+  card.media.push(mediaObj);
+  urlInput.value = '';
+  if (noteInput) noteInput.value = '';
+  // Re-render media list
   const list = document.getElementById('ml-' + cardId);
   const i = card.media.length - 1;
-  const item = document.createElement('div');
-  item.className = 'media-item';
-  item.innerHTML = `
-    <span class="media-item-icon">${getMediaIcon(url)}</span>
-    <a class="media-item-link" href="${url}" target="_blank">${shortUrl(url)}</a>
-    <span class="media-item-del" onclick="removeMedia('${phaseId}','${cardId}',${i})" title="حذف">✕</span>
+  const div = document.createElement('div');
+  div.className = 'media-item';
+  div.style.cssText = 'flex-direction:column;align-items:stretch;gap:5px';
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="media-item-icon">${getMediaIcon(url)}</span>
+      <div class="media-item-inner">
+        <a class="media-item-link" href="${url}" target="_blank">${shortUrl(url)}</a>
+      </div>
+      <span class="media-item-del" onclick="removeMedia('${phaseId}','${cardId}',${i})">✕</span>
+    </div>
+    <textarea class="media-item-note" placeholder="اكتب وصف للرابط أو الفيديو..." oninput="updateMediaNote('${phaseId}','${cardId}',${i},this.value)">${note}</textarea>
   `;
-  list.appendChild(item);
+  list.appendChild(div);
   showToast('تم إضافة اللينك ✓');
+  writePhase(phaseId);
 }
 
 function removeMedia(phaseId, cardId, idx) {
   const card = data[phaseId].find(c => c.id === cardId);
   if (!card) return;
   card.media.splice(idx, 1);
-  // Re-render just the media list
   const list = document.getElementById('ml-' + cardId);
-  list.innerHTML = card.media.map((m,i) => `
-    <div class="media-item">
-      <span class="media-item-icon">${getMediaIcon(m)}</span>
-      <a class="media-item-link" href="${m}" target="_blank">${shortUrl(m)}</a>
-      <span class="media-item-del" onclick="removeMedia('${phaseId}','${cardId}',${i})">✕</span>
-    </div>
-  `).join('');
+  list.innerHTML = card.media.map((m, i) => {
+    const url = typeof m === 'object' ? m.url : m;
+    const note = typeof m === 'object' ? (m.note||'') : '';
+    return `
+    <div class="media-item" style="flex-direction:column;align-items:stretch;gap:5px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="media-item-icon">${getMediaIcon(url)}</span>
+        <div class="media-item-inner">
+          <a class="media-item-link" href="${url}" target="_blank">${shortUrl(url)}</a>
+        </div>
+        <span class="media-item-del" onclick="removeMedia('${phaseId}','${cardId}',${i})">✕</span>
+      </div>
+      <textarea class="media-item-note" placeholder="اكتب وصف للرابط أو الفيديو..." oninput="updateMediaNote('${phaseId}','${cardId}',${i},this.value)">${note}</textarea>
+    </div>`;
+  }).join('');
+  writePhase(phaseId);
+}
+
+function updateMediaNote(phaseId, cardId, idx, val) {
+  const card = (data[phaseId]||[]).find(c => c.id === cardId);
+  if (!card || !card.media[idx]) return;
+  if (typeof card.media[idx] === 'string') {
+    card.media[idx] = { url: card.media[idx], note: val };
+  } else {
+    card.media[idx].note = val;
+  }
+  // debounce save
+  clearTimeout(card._noteTimer);
+  card._noteTimer = setTimeout(() => writePhase(phaseId), 1500);
 }
 
 
