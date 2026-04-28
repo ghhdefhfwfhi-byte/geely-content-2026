@@ -4,37 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Geely × Watad — Content Dashboard 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --bg3: #18181f;
-  --border: rgba(255,255,255,0.07);
-  --border-hover: rgba(255,255,255,0.15);
-  --text: #f0eff8;
-  --text2: #8888a0;
-  --text3: #55556a;
-  --accent: #3d6bff;
-  --accent2: #7c4dff;
-  --green: #00e5a0;
-  --amber: #f5a623;
+  --bg: #16232A;
+  --bg2: #0d1a1f;
+  --bg3: #1a2f35;
+  --border: rgba(7,149,152,0.15);
+  --border-hover: rgba(7,149,152,0.4);
+  --text: #ffffff;
+  --text2: #a8c4c6;
+  --text3: #5a7f82;
+  --accent: #079598;
+  --accent2: #FF5B04;
+  --green: #079598;
+  --amber: #FF5B04;
   --red: #ff4d6a;
   --meta: #1877F2;
   --tiktok: #69c9d0;
   --yt: #FF0000;
   --google: #4285F4;
-  --phase1: #3d6bff;
-  --phase2: #7c4dff;
-  --phase3: #f5a623;
-  --phase4c: #00e5a0;
-  --phase4e: #ff4d6a;
+  --phase1: #079598;
+  --phase2: #FF5B04;
+  --phase3: #079598;
+  --phase4c: #FF5B04;
+  --phase4e: #079598;
+  --dark-teal: #003333;
+  --light-teal: #E3EDEE;
+  --accent-teal: #079598;
+  --dark-navy: #16232A;
+  --orange: #FF5B04;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -47,8 +52,8 @@ body::before {
   position: fixed;
   inset: 0;
   background-image: 
-    linear-gradient(rgba(61,107,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(61,107,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(7,149,152,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(7,149,152,0.04) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -59,14 +64,13 @@ body::before {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(10,10,15,0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  background: #003333;
+  border-bottom: 3px solid #FF5B04;
   padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 60px;
 }
 
 .nav-logo {
@@ -76,13 +80,15 @@ body::before {
 }
 
 .nav-logo-badge {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  background: var(--accent);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  background: #FF5B04;
   color: #fff;
-  padding: 3px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 2px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
 }
 
 .nav-title {
@@ -103,7 +109,7 @@ body::before {
 }
 
 .btn {
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   font-size: 12px;
   font-weight: 500;
   padding: 6px 14px;
@@ -121,27 +127,28 @@ body::before {
 .btn:hover { background: var(--bg2); border-color: var(--border-hover); }
 
 .btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: #FF5B04;
+  border-color: #FF5B04;
   color: #fff;
+  font-weight: 700;
 }
 
-.btn-primary:hover { background: #5a84ff; border-color: #5a84ff; }
+.btn-primary:hover { background: #e04e00; border-color: #e04e00; }
 
 /* PHASE TABS */
 .phase-bar {
   position: relative;
   z-index: 1;
-  padding: 1rem 2rem;
+  padding: 0.75rem 2rem;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg2);
+  border-bottom: 2px solid rgba(7,149,152,0.2);
+  background: #0d1a1f;
 }
 
 .phase-tab {
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   font-size: 12px;
   font-weight: 500;
   padding: 7px 16px;
@@ -164,11 +171,11 @@ body::before {
 
 .phase-tab:hover { border-color: var(--border-hover); color: var(--text); }
 .phase-tab.active { color: #fff; }
-.phase-tab[data-phase="1"].active { border-color: var(--phase1); background: rgba(61,107,255,0.15); }
-.phase-tab[data-phase="2"].active { border-color: var(--phase2); background: rgba(124,77,255,0.15); }
-.phase-tab[data-phase="3"].active { border-color: var(--phase3); background: rgba(245,166,35,0.15); }
-.phase-tab[data-phase="4c"].active { border-color: var(--phase4c); background: rgba(0,229,160,0.12); }
-.phase-tab[data-phase="4e"].active { border-color: var(--phase4e); background: rgba(255,77,106,0.12); }
+.phase-tab[data-phase="1"].active { border-color: #079598; background: rgba(7,149,152,0.15); color: #fff; }
+.phase-tab[data-phase="2"].active { border-color: #FF5B04; background: rgba(255,91,4,0.15); color: #fff; }
+.phase-tab[data-phase="3"].active { border-color: #079598; background: rgba(7,149,152,0.15); color: #fff; }
+.phase-tab[data-phase="4c"].active { border-color: #FF5B04; background: rgba(255,91,4,0.15); color: #fff; }
+.phase-tab[data-phase="4e"].active { border-color: #079598; background: rgba(7,149,152,0.15); color: #fff; }
 
 /* MAIN */
 main {
@@ -181,9 +188,10 @@ main {
 
 /* PHASE HEADER */
 .phase-header-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: #003333;
+  border: none;
+  border-left: 4px solid #FF5B04;
+  border-radius: 0;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   display: flex;
@@ -230,15 +238,15 @@ main {
 }
 
 .kpi-box {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(7,149,152,0.25);
+  border-radius: 2px;
   padding: 10px 16px;
   text-align: center;
   min-width: 90px;
 }
 
-.kpi-label { font-size: 10px; color: var(--text3); margin-bottom: 4px; font-family: 'Space Mono', monospace; }
+.kpi-label { font-size: 10px; color: #a8c4c6; margin-bottom: 4px; font-family: 'Tajawal', sans-serif; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
 .kpi-val { font-size: 18px; font-weight: 700; color: var(--text); }
 
 /* SECTION HEADER */
@@ -250,12 +258,12 @@ main {
 }
 
 .section-title {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text2);
+  font-size: 10px;
+  font-weight: 700;
+  color: #079598;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  font-family: 'Space Mono', monospace;
+  letter-spacing: 4px;
+  font-family: 'Tajawal', sans-serif;
 }
 
 /* LAYER SECTION */
@@ -282,9 +290,9 @@ main {
 }
 
 .content-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: #0d1a1f;
+  border: 1px solid rgba(7,149,152,0.15);
+  border-radius: 2px;
   padding: 0;
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -292,13 +300,13 @@ main {
 }
 
 .content-card:hover {
-  border-color: var(--border-hover);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  border-color: rgba(7,149,152,0.5);
+  box-shadow: 0 0 0 1px rgba(7,149,152,0.2);
 }
 
 .card-top {
   padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(7,149,152,0.15);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -325,7 +333,7 @@ main {
   border: none;
   background: transparent;
   width: 100%;
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
 }
 
 .card-desc {
@@ -337,7 +345,7 @@ main {
   background: transparent;
   width: 100%;
   resize: none;
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   min-height: 50px;
 }
 
@@ -347,7 +355,7 @@ main {
 
 .card-footer {
   padding: 10px 16px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(7,149,152,0.12);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -422,18 +430,19 @@ main {
 .media-input::placeholder { color: var(--text3); }
 
 .media-btn {
-  font-size: 11px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--accent);
-  background: rgba(61,107,255,0.15);
-  color: #7fa3ff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 2px;
+  border: 1px solid #FF5B04;
+  background: rgba(255,91,4,0.15);
+  color: #FF5B04;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s;
 }
 
-.media-btn:hover { background: rgba(61,107,255,0.25); }
+.media-btn:hover { background: rgba(255,91,4,0.3); }
 
 .media-items { display: flex; flex-direction: column; gap: 6px; }
 
@@ -477,7 +486,7 @@ main {
 .media-item-note {
   font-size: 13px;
   color: var(--text2);
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   padding: 8px 10px;
   background: rgba(255,255,255,0.04);
   border-radius: 6px;
@@ -515,7 +524,7 @@ main {
   cursor: pointer;
   color: var(--text3);
   font-size: 13px;
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   transition: all 0.2s;
   width: 100%;
   text-align: center;
@@ -538,9 +547,10 @@ main {
 .modal-overlay.open { display: flex; }
 
 .modal {
-  background: var(--bg2);
-  border: 1px solid var(--border-hover);
-  border-radius: 14px;
+  background: #003333;
+  border: 1px solid rgba(7,149,152,0.4);
+  border-top: 3px solid #FF5B04;
+  border-radius: 2px;
   width: 480px;
   max-width: 95vw;
   padding: 1.5rem;
@@ -592,18 +602,18 @@ main {
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  background: #0d1a1f;
+  border: 1px solid rgba(7,149,152,0.25);
+  border-radius: 2px;
   padding: 9px 12px;
   color: var(--text);
   font-size: 13px;
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-family: 'Tajawal', sans-serif;
   outline: none;
   transition: border-color 0.2s;
 }
 
-.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: #079598; }
 .form-textarea { resize: vertical; min-height: 70px; }
 .form-select { cursor: pointer; }
 .form-select option { background: var(--bg2); }
@@ -619,9 +629,10 @@ main {
 
 /* BUDGET BARS */
 .budget-section {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  background: #003333;
+  border: none;
+  border-right: 3px solid #079598;
+  border-radius: 0;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -678,15 +689,16 @@ main {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%) translateY(100px);
-  background: var(--bg3);
-  border: 1px solid var(--green);
-  border-radius: 8px;
+  background: #003333;
+  border: 1px solid #FF5B04;
+  border-radius: 2px;
   padding: 10px 20px;
   font-size: 13px;
-  color: var(--green);
+  color: #FF5B04;
   z-index: 2000;
   transition: transform 0.3s ease;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 700;
 }
 
 .toast.show { transform: translateX(-50%) translateY(0); }
@@ -937,8 +949,8 @@ function buildPanel(phaseId) {
     layers[l].push(c);
   });
 
-  const layerColors = { 'Awareness':'rgba(61,107,255,0.12)','Consideration':'rgba(245,166,35,0.1)','Conversion':'rgba(0,229,160,0.1)','General':'rgba(255,255,255,0.05)' };
-  const layerText = { 'Awareness':'#7fa3ff','Consideration':'#f5c06a','Conversion':'#00e5a0','General':'#8888a0' };
+  const layerColors = { 'Awareness':'rgba(7,149,152,0.1)','Consideration':'rgba(255,91,4,0.08)','Conversion':'rgba(7,149,152,0.15)','General':'rgba(255,255,255,0.03)' };
+  const layerText = { 'Awareness':'#079598','Consideration':'#FF5B04','Conversion':'#079598','General':'#5a7f82' };
 
   let layerSections = '';
   const order = ['Awareness','Consideration','Conversion','General'];
@@ -1304,5 +1316,10 @@ initFirebase();
 </script>
 
 
+  <!-- WATAD FOOTER -->
+  <footer style="position:relative;z-index:1;margin-top:3rem;padding:1rem 2rem;border-top:1px solid rgba(7,149,152,0.2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <span style="font-size:11px;color:#5a7f82;font-family:'Tajawal',sans-serif;letter-spacing:1px">Prepared by Watad Agency · 2026 · Confidential</span>
+    <span style="font-size:12px;font-weight:900;color:#079598;font-family:'Tajawal',sans-serif;letter-spacing:6px">WATAD</span>
+  </footer>
 </body>
 </html>
